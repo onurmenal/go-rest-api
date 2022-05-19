@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/onurmenal/go-rest-api/internal/comment"
 	"github.com/onurmenal/go-rest-api/internal/db"
 )
 
@@ -24,6 +25,12 @@ func Run() error {
 		fmt.Println("failed to migrate database")
 		return err
 	}
+
+	cmtService := comment.NewService(db)
+	fmt.Println(cmtService.GetComment(
+		context.Background(),
+		"904a8e95-b6a0-4f80-9142-5cf0a5895d25",
+	))
 
 	fmt.Println("Successfully connected and pinged database")
 
