@@ -20,6 +20,7 @@ type Comment struct {
 
 type Store interface {
 	GetComment(context.Context, string) (Comment, error)
+	PostComment(context.Context, Comment) (Comment, error)
 }
 
 type Service struct {
@@ -46,10 +47,15 @@ func (s *Service) UpdateComment(ctx context.Context, cmt Comment) error {
 	return ErrorNotImplemented
 }
 
-func (*Service) DeleteCommment(ctx context.Context, id string) error {
+func (s *Service) DeleteCommment(ctx context.Context, id string) error {
 	return ErrorNotImplemented
 }
 
-func (*Service) CreateComment(ctx context.Context, cmt Comment) (Comment, error) {
-	return Comment{}, ErrorNotImplemented
+func (s *Service) PostComment(ctx context.Context, cmt Comment) (Comment, error) {
+	fmt.Println("posting a comment")
+	insertedComment, err := s.Store.PostComment(ctx, cmt)
+	if err != nil {
+		return Comment{}, ErrorMessage
+	}
+	return insertedComment, nil
 }
