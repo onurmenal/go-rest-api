@@ -6,6 +6,7 @@ import (
 
 	"github.com/onurmenal/go-rest-api/internal/comment"
 	"github.com/onurmenal/go-rest-api/internal/db"
+	transportHttp "github.com/onurmenal/go-rest-api/internal/transport/http"
 )
 
 func Run() error {
@@ -28,13 +29,10 @@ func Run() error {
 
 	cmtService := comment.NewService(db)
 
-	fmt.Println(cmtService.PostComment(context.Background(), comment.Comment{
-		Slug:   "testslug",
-		Body:   "testbody",
-		Author: "onur menal",
-	}))
-
-	fmt.Println("Successfully connected and pinged database")
+	httpHandler := transportHttp.NewHandler(cmtService)
+	if err := httpHandler.Serve(); err != nil {
+		return err
+	}
 
 	return nil
 }
