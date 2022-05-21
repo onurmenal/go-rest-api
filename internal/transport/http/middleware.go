@@ -1,7 +1,9 @@
 package http
 
 import (
+	"context"
 	"net/http"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -21,5 +23,13 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 				"method": r.Method,
 				"path":   r.URL.Path,
 			}).Info("handled request")
+	})
+}
+
+func TimeoutMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx, cancel := context.WithTimeout(r.Context(), 15*time.Second)
+		defer cancel()
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
