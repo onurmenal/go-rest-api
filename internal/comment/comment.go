@@ -55,7 +55,7 @@ func (s *Service) UpdateComment(ctx context.Context, id string, cmt Comment) (Co
 	return cmt, nil
 }
 
-func (s *Service) DeleteCommment(ctx context.Context, id string) error {
+func (s *Service) DeleteComment(ctx context.Context, id string) error {
 	fmt.Println("deleting a comment")
 	err := s.Store.DeleteComment(ctx, id)
 	if err != nil {
